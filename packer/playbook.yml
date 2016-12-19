@@ -1,0 +1,22 @@
+---
+- hosts: all
+  remote_user: ubuntu
+  become: yes
+  become_method: sudo
+  gather_facts: no
+
+  pre_tasks:
+   - name: 'install python2'
+     raw: sudo apt-get -y install python-simplejson
+
+   - name: update apt
+     apt: update_cache=yes
+
+   - name: install ruby
+     apt: name=ruby
+
+   - name: install rubygems
+     apt: name=rubygems
+
+   - name: install nginx
+     apt: name=nginx
