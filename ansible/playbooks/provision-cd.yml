@@ -1,5 +1,5 @@
 ---
-- hosts: rails
+- hosts: continuous_delivery
   become: yes
 
   vars_files:

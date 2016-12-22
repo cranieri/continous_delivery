@@ -2,7 +2,7 @@
 
 ##Create infrastructure and inventory file
 echo "Creating infrastructure"
-terraform apply
+sudo terraform apply
 
 ##Run Ansible playbooks
 echo "Quick sleep while instances spin up"
