@@ -37,7 +37,7 @@ resource "aws_instance" "deployment" {
   user_data                   = "${file("files/web_bootstrap.sh")}"
   associate_public_ip_address = true
 
-  vpc_security_group_ids = ["${aws_security_group.web_inbound_sg.id}"]
+  vpc_security_group_ids = ["${aws_security_group.web_host_sg.id}"]
 
   tags {
     Name = "deployment"

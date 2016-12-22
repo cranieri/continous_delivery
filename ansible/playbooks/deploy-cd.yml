@@ -1,0 +1,12 @@
+---
+- hosts: continuous_delivery
+  become: yes
+
+  tasks:
+    - name: Ensure demo application is at correct release.
+      git:
+        repo: https://github.com/cranieri/continous_delivery.git
+        version: master
+        dest: "/opt/continuous_delivery"
+        force: yes
+      register: app_updated
