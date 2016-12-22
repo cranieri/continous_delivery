@@ -1,0 +1,117 @@
+---
+- hosts: all
+  become: yes
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Ensure demo application is at correct release.
+      git:
+        repo: https://github.com/cranieri/dummyapp.git
+        version: "{{ app_version }}"
+        dest: "{{ app_directory }}"
+        force: yes
+      register: app_updated
+      #notify: restart nginx
+
+    # - name: Ensure secrets file is present.
+    #   template:
+    #     src: templates/secrets.yml.j2
+    #     dest: "{{ app_directory }}/config/secrets.yml"
+    #     owner: "{{ app_user }}"
+    #     group: "{{ app_user }}"
+    #     mode: 0664
+      #notify: restart nginx
+
+    - name: Check that the default exists into sites-available
+      stat:
+        path: /etc/nginx/sites-available/default
+      register: nginx_result_sites_available
+
+    - name: Check that the default exists into sites-enabled
+      stat:
+        path: /etc/nginx/sites-enabled/default
+      register: nginx_result_sites_enabled
+
+    - name: Delete default nginx config
+      become: yes
+      command: "rm /etc/nginx/sites-available/default"
+      when: nginx_result_sites_available.stat.exists == True
+
+    - name: Delete default nginx config
+      become: yes
+      command: "rm /etc/nginx/sites-enabled/default"
+      when: nginx_result_sites_enabled.stat.exists == True
+
+    - name: Create nginx config
+      template:
+        src: templates/dummyapp.conf.j2
+        dest: "/etc/nginx/conf.d/dummyapp.conf"
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: 0664
+
+    - name: Install bundler.
+      shell: "gem install bundler"
+
+    - name: Install required dependencies with bundler.
+      shell: "cd {{app_directory}} && bundle install"
+      become_user: ubuntu
+      #when: app_updated.changed == true
+      #notify: restart nginx
+
+    # - name: Check if database exists.
+    #   stat: "path={{ app_directory }}/db/{{ app_environment.RAILS_ENV }}.sqlite3"
+    #   register: app_db_exists
+    #
+    # - name: Create database.
+    #   shell: "bundle exec rake db:create chdir={{ app_directory }}"
+    #   when: app_db_exists.stat.exists == false
+    #   notify: restart nginx
+
+    # - name: Perform deployment-related rake tasks.
+    #   shell: "{{ item }} chdir={{ app_directory }}"
+    #   with_items:
+    #     - bundle exec rake db:migrate
+    #     - bundle exec rake assets:precompile
+    #   environment: app_environment
+    #   when: app_updated.changed == true
+    #   notify: restart nginx
+
+    - name: Ensure demo application has correct user for files.
+      file:
+        path: "{{ app_directory }}"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        recurse: yes
+      #notify: restart nginx
+
+    - name: Ensure unicorn pids directory exists
+      file:
+        path: /opt/pids
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: 0755
+
+    - name: Add log direcotry
+      file:
+        path: "{{ app_directory }}/log"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: 0755
+
+    - name: Create unicorn init script
+      template:
+        src: templates/unicorn.conf
+        dest: "/etc/init.d/unicorn"
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: 0755
+
+    - name: Run unicorn.
+      shell: "/etc/init.d/unicorn restart"
+      become: yes

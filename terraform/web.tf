@@ -29,6 +29,21 @@ resource "aws_instance" "web" {
   count = "${length(var.instance_ips)}"
 }
 
+resource "aws_instance" "deployment" {
+  ami                         = "${lookup(var.ami, var.region)}"
+  instance_type               = "${var.instance_type}"
+  key_name                    = "${aws_key_pair.ssh_public_key.key_name}"
+  subnet_id                   = "${module.vpc.public_subnet_id}"
+  user_data                   = "${file("files/web_bootstrap.sh")}"
+  associate_public_ip_address = true
+
+  vpc_security_group_ids = ["${aws_security_group.web_inbound_sg.id}"]
+
+  tags {
+    Name = "deployment"
+  }
+}
+
 resource "aws_key_pair" "ssh_public_key" {
   key_name = "ssh public key"
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDXVf53RXsc2fM2elVt37H+bIUjRMUG7ii8zQgblsCqquuMP29OnTFux/lLuMuFwn5UC3b+7wYBHUzzGhvvw+jtwRjCFt+jiOiVTmZQpwyAEPRt7OWuGPyyX+K8tXARBcsmFaFDqrlntZ0UPglxfPw7PtTNFCkhAZ9PAzq0OD4wtIgcXejKRO3ybNyKy8I4yHz2VH5BytLEHHA9QoHssBOhOChyvIdp5vTBNdL78cD9hKsFRRn1m1/VKlvVwPdgDw/RMBdQmblc/mevwRrqOb6QpgCcWfo00xeYF9wMJmt6ItdMMfwWJ7epXeVRuFwFpmVWkRVWSw+7Ag2ujHEftUld7hVXoHVaJLLWQsiHbrhuoQuVw50mBI80Tpep2Jj0jXq97JK6pKYk8kkv+FtVbALePDK+MjY5pgE5p9PmhElfAAvz3juZsHTKKGRCfdFnvTs9/NbARZ0p17kuOVG9JVNvtRG3px8AY8watzvXAWMBLVCi0x/SFixcHHCDXUv+cAr+86n3Dwk0dLktMyAdpFPPJvbO9QBN87fLEQJGoxelaO92AdiiYKKfQVCoS/CD7Dr/P/OPb4Gt7lbnpR6h6HM/Atwn1BwHUPipj/aRJZ5wu6zsNY1a51WTyxhdXlsi7QiA/3sX2Ar9s3iChWyX27qbkhDhPOPgna2wKaoiOOQcGw== co.ranieri@gmail.com"

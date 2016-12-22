@@ -1,0 +1,11 @@
+---
+# Variables for our app.
+app_version: master
+app_directory: /opt/demo-rails-app
+app_user: www-data
+app_secrets:
+  dev: fe562ec1e21eecc5af4d83f6a157a7
+  test: 4408f36dd290766d2f368fdfcedf4d
+  prod: 9bf801da1a24c9a103ea86a1438caa
+app_environment:
+  RAILS_ENV: production
