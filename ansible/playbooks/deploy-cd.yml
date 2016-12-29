@@ -2,6 +2,24 @@
 - hosts: continuous_delivery
   become: yes
 
+  roles:
+    - role: awscli
+      awscli_profiles:
+        default:
+          aws_access_key_id: AKIAJT4W424UB7YMFUJQ
+          aws_secret_access_key: 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
+      awscli_configuration:
+        default:
+          region: us-east-1
+          output: json
+      awscli_users:
+        ubuntu:
+          profiles:
+            - default
+          configuration:
+            default: default
+      tags: [ awscli ]
+
   tasks:
     - name: Ensure demo application is at correct release.
       git:
@@ -18,4 +36,4 @@
 
     - name: "unzip terraform"
       become: yes
-      shell: "unzip /usr/local/bin/terraform_0.8.2_linux_amd64.zip -d /usr/local/bin/"
+      shell: "unzip -o /usr/local/bin/terraform_0.8.2_linux_amd64.zip -d /usr/local/bin/"
