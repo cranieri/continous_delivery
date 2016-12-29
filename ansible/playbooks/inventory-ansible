@@ -1,11 +1,11 @@
-[rails]
+[tag_Name_web_001]
 54.172.252.163
 52.87.197.54
 
 [tag_Name_deployment]
 54.209.206.49
 
-[rails:vars]
+[tag_Name_web_001:vars]
 ansible_ssh_user=ubuntu
 ansible_ssh_private_key_file=~/.ssh/id_rsa
 
