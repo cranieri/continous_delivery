@@ -115,3 +115,7 @@
     - name: Run unicorn.
       shell: "/etc/init.d/unicorn restart"
       become: yes
+
+    - name: Restart Nginx
+      shell: "service nginx restart"
+      become: yes
