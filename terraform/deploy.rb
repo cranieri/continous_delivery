@@ -10,4 +10,4 @@ sudo terraform apply
 echo "Quick sleep while instances spin up"
 sleep 20
 echo "Ansible provisioning"
-ansible-playbook ../ansible/playbooks/main.yml -i ../ansible/playbooks/inventory-ansible -vvv
+ansible-playbook ../ansible/playbooks/main.yml

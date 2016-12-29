@@ -1,17 +1,19 @@
-[tag_Name_dummyapp_001,tag_Name_dummyapp_002]
-54.172.252.163
-52.87.197.54
+[tag_Name_dummyapp_001]
+52.23.178.10
+
+[tag_Name_dummyapp_002]
+54.210.122.180
 
 [tag_Name_deployment]
-54.209.206.49
+54.174.45.0
 
 [tag_Name_dummyapp_001:vars]
 ansible_ssh_user=ubuntu
-ansible_ssh_private_key_file=~/.ssh/id_rsa
+ansible_ssh_private_key_file=~/.ssh/id_rsa_dummy
 
 [tag_Name_dummyapp_002:vars]
 ansible_ssh_user=ubuntu
-ansible_ssh_private_key_file=~/.ssh/id_rsa
+ansible_ssh_private_key_file=~/.ssh/id_rsa_dummy
 
 [tag_Name_deployment:vars]
 ansible_ssh_user=ubuntu
