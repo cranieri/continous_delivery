@@ -1,5 +1,5 @@
 ---
-- hosts: continuous_delivery
+- hosts: tag_Name_deployment
   become: yes
 
   roles:
