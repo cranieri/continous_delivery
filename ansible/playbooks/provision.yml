@@ -1,5 +1,5 @@
 ---
-- hosts: tag_Name_web_001
+- hosts: tag_Name_dummyapp_001,tag_Name_dummyapp_002
   become: yes
 
   vars_files:

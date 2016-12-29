@@ -2,10 +2,35 @@
 - hosts: all
   remote_user: ubuntu
   become: yes
-  become_method: sudo
+  #become_method: sudo
   gather_facts: no
 
+  environment:
+    ANSIBLE_HOSTS: /etc/ansible/ec2.py
+    EC2_INI_PATH: /etc/ansible/ec2.ini
+
+  roles:
+    - role: awscli
+      awscli_profiles:
+        default:
+          aws_access_key_id: AKIAJT4W424UB7YMFUJQ
+          aws_secret_access_key: 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
+      awscli_configuration:
+        default:
+          region: us-east-1
+          output: json
+      awscli_users:
+        ubuntu:
+          profiles:
+            - default
+          configuration:
+            default: default
+      tags: [ awscli ]
+
   pre_tasks:
+   - name: 'update apt-get'
+     raw: sudo apt-get update
+
    - name: 'install python2'
      raw: sudo apt-get -y install python-simplejson
 
@@ -20,3 +45,26 @@
 
    - name: install nginx
      apt: name=nginx
+
+   - name: install ansible
+     apt: name=ansible
+
+   - name: install boto
+     apt: name=python-boto
+
+  tasks:
+   - name: Create ec2.ini
+     template:
+       src: ec2.ini
+       dest: "/etc/ansible/ec2.ini"
+       owner: ubuntu
+       group: ubuntu
+       mode: 0664
+
+   - name: Create ec2.py
+     template:
+       src: ec2.py
+       dest: "/etc/ansible/ec2.py"
+       owner: ubuntu
+       group: ubuntu
+       mode: 0755

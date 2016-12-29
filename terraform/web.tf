@@ -23,7 +23,7 @@ resource "aws_instance" "web" {
   ]
 
   tags {
-    Name = "web-${format("%03d", count.index + 1)}"
+    Name = "dummyapp-${format("%03d", count.index + 1)}"
   }
 
   count = "${length(var.instance_ips)}"

@@ -2,7 +2,7 @@
   "builders": [{
     "type": "amazon-ebs",
     "region": "us-east-1",
-    "source_ami": "ami-04393313",
+    "source_ami": "ami-9dcfdb8a",
     "instance_type": "t2.micro",
     "ssh_username": "ubuntu",
     "ami_name": "Ubuntu 14.04 Packer - {{timestamp}}"
