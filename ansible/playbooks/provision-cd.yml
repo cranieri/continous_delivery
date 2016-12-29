@@ -16,6 +16,7 @@
         - libpq-dev
         - build-essential
         - git
+        - ansible
 
     - name: Ensure app directory exists and is writeable.
       file:

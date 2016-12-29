@@ -10,3 +10,12 @@
         dest: "/opt/continuous_delivery"
         force: yes
       register: app_updated
+
+    - name: download terraform
+      get_url:
+        url: "https://releases.hashicorp.com/terraform/0.8.2/terraform_0.8.2_linux_amd64.zip"
+        dest: /usr/local/bin
+
+    - name: "unzip terraform"
+      become: yes
+      shell: "unzip /usr/local/bin/terraform_0.8.2_linux_amd64.zip -d /usr/local/bin/"

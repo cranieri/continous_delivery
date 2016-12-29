@@ -37,6 +37,16 @@ resource "aws_instance" "deployment" {
   user_data                   = "${file("files/web_bootstrap.sh")}"
   associate_public_ip_address = true
 
+  provisioner "file" {
+    source = "id_rsa"
+    destination = "/home/ubuntu/.ssh/id_rsa"
+    connection {
+      private_key = "${file("id_rsa")}"
+      user = "ubuntu"
+      agent = false
+    }
+  }
+
   vpc_security_group_ids = ["${aws_security_group.web_host_sg.id}"]
 
   tags {
@@ -46,7 +56,7 @@ resource "aws_instance" "deployment" {
 
 resource "aws_key_pair" "ssh_public_key" {
   key_name = "ssh public key"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDXVf53RXsc2fM2elVt37H+bIUjRMUG7ii8zQgblsCqquuMP29OnTFux/lLuMuFwn5UC3b+7wYBHUzzGhvvw+jtwRjCFt+jiOiVTmZQpwyAEPRt7OWuGPyyX+K8tXARBcsmFaFDqrlntZ0UPglxfPw7PtTNFCkhAZ9PAzq0OD4wtIgcXejKRO3ybNyKy8I4yHz2VH5BytLEHHA9QoHssBOhOChyvIdp5vTBNdL78cD9hKsFRRn1m1/VKlvVwPdgDw/RMBdQmblc/mevwRrqOb6QpgCcWfo00xeYF9wMJmt6ItdMMfwWJ7epXeVRuFwFpmVWkRVWSw+7Ag2ujHEftUld7hVXoHVaJLLWQsiHbrhuoQuVw50mBI80Tpep2Jj0jXq97JK6pKYk8kkv+FtVbALePDK+MjY5pgE5p9PmhElfAAvz3juZsHTKKGRCfdFnvTs9/NbARZ0p17kuOVG9JVNvtRG3px8AY8watzvXAWMBLVCi0x/SFixcHHCDXUv+cAr+86n3Dwk0dLktMyAdpFPPJvbO9QBN87fLEQJGoxelaO92AdiiYKKfQVCoS/CD7Dr/P/OPb4Gt7lbnpR6h6HM/Atwn1BwHUPipj/aRJZ5wu6zsNY1a51WTyxhdXlsi7QiA/3sX2Ar9s3iChWyX27qbkhDhPOPgna2wKaoiOOQcGw== co.ranieri@gmail.com"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCneYF5svEkijvD0thTEqoBQdch+ondj4+LcWNWEljUKBHavWvV+YouyNvSh+DHmfpg6GnDW/LsF5wBg5joIBx0qH5QdLep6GKXhaVDNO/IjKBNrr7etYnKAyczBUGh7cs9ixfNKYVheZeK07HJE5UC1MOogXSB3QFbxNob3JRIAABXgZXJesdaeNSOP4Mpnedq091WZv14VLP991n06kD8Uf/OSz0r+bYQrx5r9yAfm1xEL+xkffCHf38hfVk00oBWLv9ZIJ4CxP5kSn6QSjNLC28yeLghAQZ966Xe38/Nh24t7h06iM8Ou1z10G0XZmDAioGR03cjLizKtNMLo6MW2xWTWCk5oE3VVGylo2LbmcGBszDQx9ddYOpKsOfClC5Eq9P6D3xbEXgMe9FCQ4s3YWO5tCs6W/VNjlXUiObuAMEl9YdPvjh4e5nQhOya05/EuKRs8pAgt9FPcB8AIW4fNyi4N3grlPuKIuUAObotP8ttUxEdCBnnBMaxbfJQi0VGbXBmq1KhMQRICurHN0ID88PdZfqAIPUbKkIMKXWjivvkmrDXSAMinwmR0DaD7uVq25Z2fslv0YE4xebtcJVMgYPzb1LPhXB0vRN2rk9nR4A45yY2vHEDT/Yu41px67XeH8andhFYsUZNEzruPGvaI4qZQ5LI6JiRr9vAjnE4Yw== co.ranieri@gmail.com"
 }
 
 resource "aws_elb" "web" {
@@ -102,7 +112,7 @@ resource "aws_security_group" "web_host_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0", "${module.vpc.cidr}"]
   }
 
   # HTTP access from the VPC

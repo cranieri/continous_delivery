@@ -1,9 +1,9 @@
 [rails]
-54.197.220.230
-54.236.224.45
+54.85.16.49
+54.226.145.6
 
 [continuous_delivery]
-54.84.110.135
+54.152.201.79
 
 [rails:vars]
 ansible_ssh_user=ubuntu
@@ -11,4 +11,4 @@ ansible_ssh_private_key_file=~/.ssh/id_rsa
 
 [continuous_delivery:vars]
 ansible_ssh_user=ubuntu
-ansible_ssh_private_key_file=~/.ssh/id_rsa
+ansible_ssh_private_key_file=~/.ssh/id_rsa_dummy
