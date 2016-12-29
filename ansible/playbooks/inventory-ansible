@@ -3,7 +3,7 @@
 52.87.197.54
 
 [continuous_delivery]
-54.242.236.254
+54.209.206.49
 
 [rails:vars]
 ansible_ssh_user=ubuntu

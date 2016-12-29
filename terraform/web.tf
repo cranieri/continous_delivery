@@ -47,6 +47,15 @@ resource "aws_instance" "deployment" {
     }
   }
 
+  provisioner "remote-exec" {
+    inline = "sudo chmod 400 /home/ubuntu/.ssh/id_rsa"
+    connection {
+      private_key = "${file("id_rsa")}"
+      user = "ubuntu"
+      agent = false
+    }
+  }
+
   vpc_security_group_ids = ["${aws_security_group.web_host_sg.id}"]
 
   tags {
