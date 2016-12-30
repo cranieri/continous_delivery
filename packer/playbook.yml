@@ -66,8 +66,9 @@
        mode: 0755
 
    - name: add ansible env variables
+     become: yes
      blockinfile:
-       dest: /home/ubuntu/.bashrc
+       dest: /etc/environment
        block: |
          export ANSIBLE_HOSTS=/etc/ansible/ec2.py
          export EC2_INI_PATH=/etc/ansible/ec2.ini
