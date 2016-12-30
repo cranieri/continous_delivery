@@ -2,26 +2,7 @@
 - hosts: all
   remote_user: ubuntu
   become: yes
-  #become_method: sudo
   gather_facts: no
-
-  roles:
-    - role: awscli
-      awscli_profiles:
-        default:
-          aws_access_key_id: AKIAJ4NFJKFPOYYERLUQ
-          aws_secret_access_key: 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
-      awscli_configuration:
-        default:
-          region: us-east-1
-          output: json
-      awscli_users:
-        ubuntu:
-          profiles:
-            - default
-          configuration:
-            default: default
-      tags: [ awscli ]
 
   pre_tasks:
    - name: 'update apt-get'
@@ -72,3 +53,4 @@
        block: |
          export ANSIBLE_HOSTS=/etc/ansible/ec2.py
          export EC2_INI_PATH=/etc/ansible/ec2.ini
+         export ANSIBLE_HOST_KEY_CHECKING=false
