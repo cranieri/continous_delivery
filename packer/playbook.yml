@@ -13,8 +13,8 @@
     - role: awscli
       awscli_profiles:
         default:
-          aws_access_key_id: AKIAJT4W424UB7YMFUJQ
-          aws_secret_access_key: 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
+          aws_access_key_id: AKIAJ4NFJKFPOYYERLUQ
+          aws_secret_access_key: 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
       awscli_configuration:
         default:
           region: us-east-1
