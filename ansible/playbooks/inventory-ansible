@@ -5,7 +5,7 @@
 54.210.122.180
 
 [tag_Name_deployment]
-54.90.223.27
+54.144.83.4
 
 [tag_Name_dummyapp_001:vars]
 ansible_ssh_user=ubuntu

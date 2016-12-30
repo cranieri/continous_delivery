@@ -5,10 +5,6 @@
   #become_method: sudo
   gather_facts: no
 
-  environment:
-    ANSIBLE_HOSTS: /etc/ansible/ec2.py
-    EC2_INI_PATH: /etc/ansible/ec2.ini
-
   roles:
     - role: awscli
       awscli_profiles:
@@ -69,8 +65,9 @@
        group: ubuntu
        mode: 0755
 
-   - name: Export ANSIBLE_HOSTS
-     shell: "export ANSIBLE_HOSTS=/etc/ansible/ec2.py"
-
-   - name: Export EC2_INI_PATH
-     shell: "export EC2_INI_PATH=/etc/ansible/ec2.ini"
+   - name: add ansible env variables
+     blockinfile:
+       dest: /home/ubuntu/.bashrc
+       block: |
+         export ANSIBLE_HOSTS=/etc/ansible/ec2.py
+         export EC2_INI_PATH=/etc/ansible/ec2.ini
