@@ -20,6 +20,11 @@
   #           default: default
   #     tags: [ awscli ]
 
+  environment:
+    ANSIBLE_HOSTS: /etc/ansible/ec2.py
+    EC2_INI_PATH: /etc/ansible/ec2.ini
+    ANSIBLE_HOST_KEY_CHECKING: false
+
   tasks:
     - name: Ensure demo application is at correct release.
       git:
