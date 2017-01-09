@@ -8,4 +8,4 @@
 
 ##Run Ansible playbooks
 echo "Ansible provisioning"
-ansible-playbook ../ansible/playbooks/main-cd.yml
+ansible-playbook ../ansible/playbooks/main-cd.yml --extra-vars "ansible_ssh_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_rsa_dummy"

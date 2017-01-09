@@ -26,7 +26,7 @@
    ANSIBLE_HOST_KEY_CHECKING: false
 
   tasks:
-    - name: Ensure demo application is at correct release.
+    - name: Ensure continous delivery code is at the correct release.
       git:
         repo: https://github.com/cranieri/continous_delivery.git
         version: master
