@@ -30,6 +30,27 @@ resource "aws_instance" "web" {
   count = "${length(var.instance_ips)}"
 }
 
+resource "aws_instance" "web_production" {
+  ami                         = "${lookup(var.ami, var.region)}"
+  instance_type               = "${var.instance_type}"
+  key_name                    = "${aws_key_pair.ssh_public_key.key_name}"
+  subnet_id                   = "${module.vpc.public_subnet_id}"
+  private_ip                  = "${var.prod_instance_ips[count.index]}"
+  user_data                   = "${file("files/web_bootstrap.sh")}"
+  associate_public_ip_address = true
+
+  vpc_security_group_ids = [
+    "${aws_security_group.web_host_sg.id}",
+  ]
+
+  tags {
+    Name = "dummyapp_prod-${format("%03d", count.index + 1)}"
+  }
+
+  iam_instance_profile = "${aws_iam_instance_profile.web_instance_profile.id}"
+  count = "${length(var.prod_instance_ips)}"
+}
+
 resource "aws_instance" "deployment" {
   ami                         = "${lookup(var.ami, var.region)}"
   instance_type               = "${var.instance_type}"
@@ -199,6 +220,23 @@ resource "aws_elb" "web" {
 
   # The instances are registered automatically
   instances = ["${aws_instance.web.*.id}"]
+}
+
+resource "aws_elb" "web_prod" {
+  name = "web-elb-prod"
+
+  subnets         = ["${module.vpc.public_subnet_id}"]
+  security_groups = ["${aws_security_group.web_inbound_sg.id}"]
+
+  listener {
+    instance_port     = 80
+    instance_protocol = "http"
+    lb_port           = 80
+    lb_protocol       = "http"
+  }
+
+  # The instances are registered automatically
+  instances = ["${aws_instance.web_production.*.id}"]
 }
 
 resource "aws_security_group" "web_inbound_sg" {

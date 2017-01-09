@@ -22,3 +22,8 @@ variable "instance_ips" {
   description = "The IPs to use for our instances"
   default     = ["10.0.1.20", "10.0.1.21"]
 }
+
+variable "prod_instance_ips" {
+  description = "The IPs to use for our prod instances"
+  default     = ["10.0.1.22", "10.0.1.23"]
+}

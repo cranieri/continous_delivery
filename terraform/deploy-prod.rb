@@ -8,4 +8,4 @@
 
 ##Run Ansible playbooks
 echo "Ansible provisioning"
-ansible-playbook ../ansible/playbooks/main.yml --extra-vars "cc_hosts=tag_Name_dummyapp_001,tag_Name_dummyapp_002 app_version=master"
+ansible-playbook ../ansible/playbooks/main.yml --extra-vars "cc_hosts=tag_Name_dummyapp_prod_001,tag_Name_dummyapp_prod_002 app_version=$1" -i ../ansible/playbooks/inventory-ansible
