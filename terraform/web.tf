@@ -26,6 +26,7 @@ resource "aws_instance" "web" {
     Name = "dummyapp-${format("%03d", count.index + 1)}"
   }
 
+  iam_instance_profile = "${aws_iam_instance_profile.web_instance_profile.id}"
   count = "${length(var.instance_ips)}"
 }
 
@@ -143,6 +144,18 @@ resource "aws_iam_role_policy" "web_iam_role_policy" {
       "Action": "elasticache:*",
       "Effect": "Allow",
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams"
+      ],
+      "Resource": [
+        "arn:aws:logs:*:*:*"
+      ]
     }
   ]
 }
