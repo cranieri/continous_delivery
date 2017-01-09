@@ -1,5 +1,5 @@
 ---
-- hosts: tag_Name_dummyapp_001,tag_Name_dummyapp_002
+- hosts: "{{ cc_hosts }}"
   become: yes
 
   vars_files:
