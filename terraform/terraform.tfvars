@@ -1,5 +1,5 @@
-region = "us-east-1"
+region = "eu-west-1"
 ami = {
-  us-east-1 = "ami-5b7a654c"
+  eu-west-1 = "ami-a4392dc2"
   us-west-1 = "ami-813a3096"
 }

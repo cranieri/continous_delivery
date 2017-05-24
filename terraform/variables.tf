@@ -15,7 +15,7 @@ variable "ami" {
 
 variable "instance_type" {
   description = "The instance type to launch."
-  default     = "t2.micro"
+  default     = "t1.micro"
 }
 
 variable "instance_ips" {
